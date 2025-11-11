@@ -2,15 +2,19 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import Product from "./schema.mjs";
+import dotenv from "dotenv";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Connect to MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/Products")
-  .then(() => console.log("✅ MongoDB Connected Successfully"))
-  .catch((err) => console.log("❌ Connection Failed:", err.message));
+
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Atlas Connected Successfully"))
+  .catch(err => console.log("❌ MongoDB Connection Error:", err.message));
+
 
 // ✅ Declare cart only once
 let cart = [];
