@@ -60,3 +60,4 @@ cd Shop-Ease-Backend
 
 # Install dependencies
 npm install
+node server.mjs
