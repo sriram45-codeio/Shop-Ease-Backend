@@ -8,29 +8,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 dotenv.config();
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Atlas Connected Successfully"))
-  .catch(err => console.log("❌ MongoDB Connection Error:", err.message));
+  .then(() => console.log("MongoDB Atlas Connected Successfully"))
+  .catch(err => console.log("MongoDB Connection Error:", err.message));
 
-
-// ✅ Declare cart only once
 let cart = [];
 
-// 🏁 Default route
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "ShopEase Backend Connected to MongoDB ✅"
+    message: "ShopEase Backend Connected to MongoDB"
   });
 });
 
-// 📦 Get all products (from DB)
 app.get("/products", async (req, res) => {
   try {
-    const products = await Product.find(); // Fetch from MongoDB
+    const products = await Product.find();
     res.status(200).json({
       success: true,
       count: products.length,
@@ -39,13 +34,12 @@ app.get("/products", async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "❌ Error fetching products from DB",
+      message: "Error fetching products from DB",
       error: err.message
     });
   }
 });
 
-// 📦 Get single product by ID
 app.get("/products/:id", async (req, res) => {
   try {
     const product = await Product.findOne({ id: req.params.id });
@@ -62,13 +56,12 @@ app.get("/products/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "❌ Error fetching product",
+      message: "Error fetching product",
       error: err.message
     });
   }
 });
 
-// 🛒 Cart Routes
 app.post("/cart", (req, res) => {
   const item = req.body;
   const exist = cart.find((p) => p.id === item.id);
@@ -98,7 +91,6 @@ app.delete("/cart", (req, res) => {
   });
 });
 
-// 🚫 Invalid route handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -107,5 +99,5 @@ app.use((req, res) => {
 });
 
 app.listen(8000, () => {
-  console.log("🚀 Server running on port 8000");
+  console.log("Server running on port 8000");
 });
